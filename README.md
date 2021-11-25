@@ -1,7 +1,13 @@
-# create-or-update-pr-action
+# Create or update PR Action
+
 A simple but powerful GitHub Action to link workflows and manage dependencies between projects.
 
-## Usage :
+
+## Usage: 
+
+To learn accurately how to use it, you must see the [guide here](/examples)
+
+## Quick Example:
 
 ```yaml
 # file -> .github/workflows/create_or_update_pr.yml
