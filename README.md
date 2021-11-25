@@ -3,7 +3,7 @@ A simple but powerful GitHub Action to link workflows and manage dependencies be
 
 ## Usage :
 
-```
+```yaml
 # file -> .github/workflows/create_or_update_pr.yml
 name: Create or Update PR
 
