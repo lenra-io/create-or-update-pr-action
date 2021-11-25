@@ -33,7 +33,7 @@ jobs:
         uses: lenra-io/create-or-update-pr-action/utils/trigger_workflow@v1
         with:
           target_ref: ${{ steps.extract_tag.outputs.target_ref }}
-          target_repository: "${{ github.repository_owner }}/Repo-C"
+          target_repository: "${{ github.repository_owner }}/repo-C"
           target_workflow: create_or_update_pr.yml
           params: |
             {
