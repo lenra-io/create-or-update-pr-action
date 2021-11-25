@@ -1,0 +1,52 @@
+name: Trigger Workflow
+
+inputs:
+  params:
+    description: 'A JSON representation of params need to be passed to the target workflow'
+    required: false
+    type: string
+  target_ref:
+    description: 'The ref where you want to run the workflow'
+    required: true
+    type: string
+  target_repository:
+    description: 'The repository org/name to trigger the workflow. Can be a comma separated string representation of an array'
+    required: true
+    type: string
+  target_workflow:
+    description: 'The workflow name to be triggered'
+    required: true
+    type: string
+  token:
+    description: 'The GitHub Token to call GitHub API'
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Delegate event to remote repository
+      shell: bash
+      env:
+        REPOSITORIES: ${{ inputs.target_repository }}
+        PARAMS: ${{ inputs.params }}
+      run: |
+        PARAMS=${PARAMS//[$'\n']}
+        # PARAMS=${PARAMS//[$'"']/'\"'}
+        
+        echo "PARAMS=$PARAMS"
+        
+        for repo in $(echo ${REPOSITORIES//,/ }); do
+            echo -e "\nCalling https://api.github.com/repos/${repo}/actions/workflows/${{ inputs.target_workflow }}/dispatches with data={\"ref\": \"${{ inputs.target_ref }}\", \"inputs\": ${PARAMS//\"/\\\"}}\n"
+            
+            result=$(curl --request POST \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token ${{ inputs.token }}" \
+              https://api.github.com/repos/${repo}/actions/workflows/${{ inputs.target_workflow }}/dispatches \
+              --data "{\"ref\": \"${{ inputs.target_ref }}\", \"inputs\": ${PARAMS//\"/\"}}")
+            
+            echo -e "${result}\n"
+            
+            [ ! "$(echo ${result} | grep -i '"message": "Not Found"')" ]
+        done
