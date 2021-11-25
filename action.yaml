@@ -1,4 +1,6 @@
 name: Create or update PR
+description: 'A simple but powerful GitHub Action to link workflows and manage dependencies between projects. #actionshackathon21'
+author: 'shiipou'
 
 inputs:
   name:
