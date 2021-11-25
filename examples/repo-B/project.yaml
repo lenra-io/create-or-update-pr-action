@@ -1,0 +1,4 @@
+name: 'Repo-B'
+
+dependencies:
+  repo_a: v1.0.0-beta.1
