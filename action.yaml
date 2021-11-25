@@ -1,0 +1,84 @@
+name: Create or update PR
+
+inputs:
+  name:
+    description: 'The PR name to update or create'
+    required: true
+    type: string
+  script:
+    description: 'Commands you want to execute before creation or update of the new PR'
+    required: true
+    type: string
+  token:
+    description: 'The GitHub Token to call GitHub API'
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: GitHub authentification
+      shell: bash
+      run: |
+        # Login into GitHub API
+        gh auth login --with-token < <(echo "${{ inputs.token }}")
+        # Set bot name to allow push
+        git config user.email "github-bot@nocturlab.fr"
+        git config user.name "GitHub Bot"
+    - name: Switch Git user
+      uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.token }}
+    - name: Get PR infos
+      id: get-pr-info
+      shell: bash
+      run: |
+        # Find PR that use the generated name branch as head.
+        branch="$(echo "deps-bot/${{ inputs.name }}" |  tr '[:upper:]' '[:lower:]')"
+        branch=${branch// /-}
+        echo "::set-output name=branch::${branch}"
+        
+        _id=$(gh pr list -H "${branch}" | cut -f1)
+        _label=$(gh pr list -H "${branch}" | cut -f2)
+        if [ -n "${_id}" ]; then
+          echo "::set-output name=id::${_id}"
+          echo "::set-output name=pr::${_label}"
+        fi
+    - name: Create new git branch
+      shell: bash
+      run: |
+        # If PR not exist, create a new branch
+        if [ -z "${{ steps.get-pr-info.outputs.id }}" ]; then
+          branch="${{ steps.get-pr-info.outputs.branch }}"
+          git checkout -b "${branch}"
+        fi
+    - name: Checkout
+      shell: bash
+      run: |
+        if [ -n "${{ steps.get-pr-info.outputs.id }}" ]; then
+          git fetch
+          git checkout "${{ steps.get-pr-info.outputs.branch }}"
+        fi
+    - name: Run script
+      shell: bash
+      run: |
+        # Run the script that edit the files we need
+        set -xe
+        ${{ inputs.script }}
+    - name: Push new changes
+      shell: bash
+      run: |
+        # Set debug mode to show logs from the script inside of runnign workflow's logs
+        set -xe
+        
+        # Push the changement to the PR branch using the correct method (PR already exist or not)
+        if [ -n "${{ steps.get-pr-info.outputs.id }}" ]; then
+          id="${{ steps.get-pr-info.outputs.id }}"
+          git push
+          info="$(gh pr view "$id" --json commits --jq ".commits[-1].messageHeadline")"
+          gh pr comment "$id" --body "${info}"
+        else
+          git push -u origin "${{ steps.get-pr-info.outputs.branch }}"
+          info="$(git log --no-decorate --pretty=oneline -n 1 | cut -d" " -f2-)"
+          gh pr create --title "${{ inputs.name }}" --body "${info}"
+        fi
