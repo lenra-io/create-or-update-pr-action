@@ -29,3 +29,5 @@ To learn accurately how to use it, you must see the [guide here](/examples)
             git add pubspec.yaml
             git commit -m "Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}"
 ```
+
+If you need more informations, you can look at this [dev.to post: https://dev.to/lenradevelopers/lenras-automatic-management-of-dependencies-5g8c-temp-slug-30907](https://dev.to/lenradevelopers/lenras-automatic-management-of-dependencies-5g8c-temp-slug-30907)
