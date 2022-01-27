@@ -9,19 +9,19 @@ Here you will find some example repositories linked by dependencies defined in a
 We will start by presenting our Git projects in the following form for some evident purposes of dependencies:
 
 ```
-Repo-A -> Repo-B, Repo-C
-Repo-B -> Repo-C
+my-library -> my-core-code, my-dev-app
+my-core-code -> my-dev-app
 ```
 
-As you can see, we have 3 Git repositories that depend on each other. In our example, repository "B" needs repository "A" to compile. And as it is quite a pain to always have to manually edit the right dependency files, this action will take care of it if it is well configured.
-If we continue our exploration, the "C" repository also requires the "A" repository in addition to the "B" repository. Projects of a certain size can have pretty complex mesh links which can be a source of errors.
+As you can see, we have 3 Git repositories that depend on each other. In our example, repository "my-core-code" needs repository "my-library" to compile. And as it is quite a pain to always have to manually edit the right dependency files, this action will take care of it if it is well configured.
+If we continue our exploration, the "my-dev-app" repository also requires the "my-library" repository in addition to the "my-core-code" repository. Projects of a certain size can have pretty complex mesh links which can be a source of errors.
 
 ### 2. Understanding links between each workflows
 
-When you publish a new release on the repository "A", this action will automatically create a Pull Request on the repository "B" and "C" to update the correct files and change it's own link in dependancy file(s).
-And now, when you merge the PR on the repository "B", and create a new release, it will update the PR on the repository "C" to add this changes.
+When you publish a new release on the repository "my-library", this action will automatically create a Pull Request on the repository "my-core-code" and "my-dev-app" to update the correct files and change it's own link in dependancy file(s).
+And now, when you merge the PR on the repository "my-core-code", and create a new release, it will update the PR on the repository "my-dev-app" to add this changes.
 
-Now we can accept changes on the repository "C" to update it's version of "A" and "B".
+Now we can accept changes on the repository "my-dev-app" to update it's version of "my-library" and "my-core-code".
 
 ### 3. Go deeper for an even better workflow
 
