@@ -1,5 +1,5 @@
-name: 'Repo-C'
+name: 'my-dev-app'
 
 dependencies:
-  repo_a: v1.0.0-beta.1
-  repo_b: v1.0.0-beta.1
+  my-library: v1.0.0-beta.1
+  my-core-code: v1.0.0-beta.1
