@@ -1,4 +1,4 @@
-name: 'Repo-B'
+name: 'my-core-code'
 
 dependencies:
-  repo_a: v1.0.0-beta.1
+  my-library: v1.0.0-beta.1
