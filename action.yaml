@@ -60,7 +60,7 @@ runs:
         # If PR Already exist, rebase to main branch and switch to ${{ steps.get-pr-info.outputs.branch }}
         git fetch
         git checkout "${{ steps.get-pr-info.outputs.branch }}"
-        git rebase --strategy-option theirs $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json baseRefName --jq '.[]') $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json headRefName --jq '.[]') 
+        git rebase --strategy-option ours $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json baseRefName --jq '.[]') $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json headRefName --jq '.[]') 
     - name: Run script
       shell: bash
       run: |
