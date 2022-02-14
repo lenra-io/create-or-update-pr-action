@@ -47,20 +47,20 @@ runs:
           echo "::set-output name=pr::${_label}"
         fi
     - name: Create new git branch
+      if: steps.get-pr-info.outputs.id == ''
       shell: bash
       run: |
         # If PR not exist, create a new branch
-        if [ -z "${{ steps.get-pr-info.outputs.id }}" ]; then
-          branch="${{ steps.get-pr-info.outputs.branch }}"
-          git checkout -b "${branch}"
-        fi
+        branch="${{ steps.get-pr-info.outputs.branch }}"
+        git checkout -b "${branch}"
     - name: Checkout
+      if: steps.get-pr-info.outputs.id != ''
       shell: bash
       run: |
-        if [ -n "${{ steps.get-pr-info.outputs.id }}" ]; then
-          git fetch
-          git checkout "${{ steps.get-pr-info.outputs.branch }}"
-        fi
+        # If PR Already exist, rebase to main branch and switch to ${{ steps.get-pr-info.outputs.branch }}
+        git fetch
+        git checkout "${{ steps.get-pr-info.outputs.branch }}"
+        git rebase --strategy-option ours $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json baseRefName --jq '.[]') $(gh pr view ${{ steps.get-pr-info.outputs.id }} --json headRefName --jq '.[]') 
     - name: Run script
       shell: bash
       run: |
@@ -76,7 +76,7 @@ runs:
         # Push the changement to the PR branch using the correct method (PR already exist or not)
         if [ -n "${{ steps.get-pr-info.outputs.id }}" ]; then
           id="${{ steps.get-pr-info.outputs.id }}"
-          git push
+          git push --force
           info="$(gh pr view "$id" --json commits --jq ".commits[-1].messageHeadline")"
           gh pr comment "$id" --body "${info}"
         else
