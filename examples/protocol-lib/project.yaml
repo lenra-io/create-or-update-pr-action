@@ -1,0 +1,4 @@
+name: 'protocol-lib'
+
+dependencies:
+  string-lib: v1.0.0-beta.1

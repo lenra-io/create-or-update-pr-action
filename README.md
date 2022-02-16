@@ -12,10 +12,10 @@ To learn accurately how to use it, you must see the [guide here](/examples)
 ```yaml
       # Call `Create or update PR` GitHub action
       - name: create_pr
-        uses: lenra-io/create-or-update-pr-action@v1
+        uses: lenra-io/create-or-update-pr-action@main
         with:
           # The name of the PR to be created.
-          name: 'Update dependecies'
+          name: 'Update dependencies'
           # The token used to create the PR. 
           # I didn't use the `secrets.GITHUB_TOKEN` here because this token can't trigger workflow event if we push something or create a PR.
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
@@ -23,7 +23,7 @@ To learn accurately how to use it, you must see the [guide here](/examples)
           # This example will upgrade the version inside of the pubspec.yaml and publish it in a new PR
           script: |
             # Update the requested dependency version in the pubspec.yaml file
-            ${{ steps.setup-yq.outputs.yq-binary }} eval ".dependencies.${{ github.event.inputs.origin }}.git.ref = \"${{  github.event.inputs.version }}\"" -i pubspec.yaml
+            yq eval ".dependencies.${{ github.event.inputs.origin }}.git.ref = \"${{  github.event.inputs.version }}\"" -i pubspec.yaml
             
             # Commit the file to include it to the PR. Don't use `git push`, it's automatic so you don't have to do it yourself.
             git add pubspec.yaml

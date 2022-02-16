@@ -1,0 +1,5 @@
+name: 'core-code'
+
+dependencies:
+  string-lib: v1.0.0-beta.1
+  protocol-lib: v1.0.0-beta.1
