@@ -1,1 +1,1 @@
-# String Library
+# String Manipulation Library
