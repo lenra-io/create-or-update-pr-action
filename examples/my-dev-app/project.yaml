@@ -1,5 +1,0 @@
-name: 'my-dev-app'
-
-dependencies:
-  my-library: v1.0.0-beta.1
-  my-core-code: v1.0.0-beta.1

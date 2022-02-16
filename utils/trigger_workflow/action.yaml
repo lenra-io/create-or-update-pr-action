@@ -33,20 +33,20 @@ runs:
       run: |
         PARAMS=${PARAMS//[$'\n']}
         # PARAMS=${PARAMS//[$'"']/'\"'}
-        
+
         echo "PARAMS=$PARAMS"
-        
+
         for repo in $(echo ${REPOSITORIES//,/ }); do
             echo -e "\nCalling https://api.github.com/repos/${repo}/actions/workflows/${{ inputs.target_workflow }}/dispatches with data={\"ref\": \"${{ inputs.target_ref }}\", \"inputs\": ${PARAMS//\"/\\\"}}\n"
-            
+
             result=$(curl --request POST \
               -H "Content-Type: application/json" \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: token ${{ inputs.token }}" \
               https://api.github.com/repos/${repo}/actions/workflows/${{ inputs.target_workflow }}/dispatches \
               --data "{\"ref\": \"${{ inputs.target_ref }}\", \"inputs\": ${PARAMS//\"/\"}}")
-            
+
             echo -e "${result}\n"
-            
+
             [ ! "$(echo ${result} | grep -i '"message": "Not Found"')" ]
         done

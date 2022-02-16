@@ -1,0 +1,4 @@
+name: 'desktop-app'
+
+dependencies:
+  core-code: v1.0.0-beta.1
