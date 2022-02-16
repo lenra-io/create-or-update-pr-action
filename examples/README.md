@@ -9,11 +9,11 @@ Here you will find some example repositories linked by dependencies defined in a
 We will start by presenting our Git projects in the following form for some evident purposes of dependencies:
 
 ```
-protocol-lib ← string-lib
-core-code ← string-lib, protocol-lib
-desktop-app ← core-code
-mobile-app ← core-code
-web-app ← core-code
+protocol-lib: string-lib
+core-code: string-lib, protocol-lib
+desktop-app: core-code
+mobile-app: core-code
+web-app: core-code
 ```
 
 As you can see, we have a total of 6 Git repositories that depend on each other. In our example, repository "core-code" that will contain main code of the app that will be shared on each platform (desktop-app, mobile-app, and web-app). That core-code needs repository "string-lib" and "protocol-lib" to compile. And as it is quite a pain to always have to manually edit the right dependency files, this action will take care of it if it's well configured.
