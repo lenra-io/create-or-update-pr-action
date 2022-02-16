@@ -1,0 +1,39 @@
+name: Create or Update PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Dependency Version'
+        required: true
+      release_notes:
+        description: 'DependencyRelease notes'
+        required: false
+      origin:
+        description: 'Name of the dependency that has to be changed.'
+        required: true
+
+jobs:
+  create_or_update_pr:
+    name: Create or Update PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup yq
+        uses: shiipou/setup-yq-action@v2.0.2
+      - name: create_pr
+        uses: lenra-io/create-or-update-pr-action@v1.0.0-beta.2
+        with:
+          name: 'Update dependecies'
+          token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+          script: |
+            yq eval ".dependencies.${{ github.event.inputs.origin }} = \"${{  github.event.inputs.version }}\"" -i project.yaml
+            git add project.yaml
+
+            RELEASE_NOTES="${{ github.event.inputs.release_notes }}"
+            RELEASE_TYPE="${RELEASE_NOTES/:*}"
+
+            git commit -m "${RELEASE_TYPE}: Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}
+            ${RELEASE_NOTES}"

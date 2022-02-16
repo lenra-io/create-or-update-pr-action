@@ -22,19 +22,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup yq
-        id: setup-yq
-        uses: shiipou/setup-yq-action@v2.0.1
+        uses: shiipou/setup-yq-action@v2.0.2
       - name: create_pr
-        uses: lenra-io/create-or-update-pr-action@v1
+        uses: lenra-io/create-or-update-pr-action@v1.0.0-beta.2
         with:
           name: 'Update dependecies'
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
           script: |
-            ${{ steps.setup-yq.outputs.yq-binary }} eval ".dependencies.${{ github.event.inputs.origin }}.git.ref = \"${{  github.event.inputs.version }}\"" -i project.yaml
+            yq eval ".dependencies.${{ github.event.inputs.origin }} = \"${{  github.event.inputs.version }}\"" -i project.yaml
             git add project.yaml
-            
+
             RELEASE_NOTES="${{ github.event.inputs.release_notes }}"
             RELEASE_TYPE="${RELEASE_NOTES/:*}"
-            
+
             git commit -m "${RELEASE_TYPE}: Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}
             ${RELEASE_NOTES}"
