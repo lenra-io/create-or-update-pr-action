@@ -30,6 +30,6 @@ This will batch upgrade at once the version in "desktop-app", "mobile-app", and 
 
 ### 3. Go deeper for an even better workflow
 
-This is be awesome to use in your projects with "sementic-release" to make releases even faster and erase error of dependency managments
+This is awesome to use in your projects with "semantic-release" to make releases even faster and avoid errors of dependency management.
 
 Now you can test it by publishing theses 3 repository on your own account/organization to see how it work. (Don't forget to create the WORKFLOW_GITHUB_TOKEN secret in the settings of each repository)
