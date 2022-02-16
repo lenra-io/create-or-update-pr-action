@@ -22,7 +22,7 @@ Projects of a certain size can have pretty complex mesh links which can be a sou
 
 ### 2. Understanding links between each workflows
 
-When you publish a new release on the repository "string-lib", this action will automatically create a Pull Request on the repository "protocol-lib" and "core-code" to update the correct files and change it's own link in dependancy file(s).
+When you publish a new release on the repository "string-lib", this action will automatically create a Pull Request on the repository "protocol-lib" and "core-code" to update the correct files and change its own link in dependency file(s).
 And now, when you merge the PR on the repository "protocol-lib", and create a new release, it will update the previously created PR on the repository "core-code" to add this changes if it's not already merged.
 
 Now we can accept changes on the repository "core-code" to update its version of "string-lib" and "protocol-lib".
