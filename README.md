@@ -15,7 +15,7 @@ To learn accurately how to use it, you must see the [guide here](/examples)
         uses: lenra-io/create-or-update-pr-action@main
         with:
           # The name of the PR to be created.
-          name: 'Update dependecies'
+          name: 'Update dependencies'
           # The token used to create the PR. 
           # I didn't use the `secrets.GITHUB_TOKEN` here because this token can't trigger workflow event if we push something or create a PR.
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
