@@ -7,6 +7,10 @@ inputs:
     description: 'The PR name to update or create'
     required: true
     type: string
+  message:
+    description: 'The message to post on PR after creation'
+    required: true
+    type: string
   script:
     description: 'Commands you want to execute before creation or update of the new PR'
     required: true
@@ -76,10 +80,8 @@ runs:
         if [ -n "${{ steps.get-pr-info.outputs.id }}" ]; then
           id="${{ steps.get-pr-info.outputs.id }}"
           git push --force
-          info="$(gh pr view "$id" --json commits --jq ".commits[-1].messageHeadline")"
-          gh pr comment "$id" --body "${info}"
+          gh pr comment "$id" --body "${{ github.event.inputs.message }}"
         else
           git push -u origin "${{ steps.get-pr-info.outputs.branch }}"
-          info="$(git log --no-decorate --pretty=oneline -n 1 | cut -d" " -f2-)"
-          gh pr create --title "${{ inputs.name }}" --body "${info}"
+          gh pr create --title "${{ inputs.name }}" --body "${{ github.event.inputs.message }}"
         fi
