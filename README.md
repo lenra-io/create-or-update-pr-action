@@ -19,6 +19,9 @@ To learn accurately how to use it, you must see the [guide here](/examples)
           # The token used to create the PR. 
           # I didn't use the `secrets.GITHUB_TOKEN` here because this token can't trigger workflow event if we push something or create a PR.
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+          # The message to comment on PR after creation (Can be Markdown)
+          message: |
+            # Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}
           # Write a little script called just before the PR creation or update.
           # This example will upgrade the version inside of the pubspec.yaml and publish it in a new PR
           script: |
@@ -27,7 +30,7 @@ To learn accurately how to use it, you must see the [guide here](/examples)
             
             # Commit the file to include it to the PR. Don't use `git push`, it's automatic so you don't have to do it yourself.
             git add pubspec.yaml
-            git commit -m "Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}"
+            git commit -m "build(deps-dev): Upgrade ${{ github.event.inputs.origin }} to ${{ github.event.inputs.version }}"
 ```
 
 If you need more informations, you can look at this [dev.to post](https://dev.to/lenradevelopers/lenras-automatic-management-of-dependencies-i28)
